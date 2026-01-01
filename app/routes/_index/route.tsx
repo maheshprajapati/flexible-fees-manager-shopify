@@ -15,15 +15,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return { showForm: Boolean(login) };
 };
 
-export default function App() {
+export default function FFMFSLanding() {
   const { showForm } = useLoaderData<typeof loader>();
 
   return (
     <div className={styles.index}>
       <div className={styles.content}>
-        <h1 className={styles.heading}>A short heading about [your app]</h1>
+        <h1 className={styles.heading}>Flexible Fees Manager for Shopify</h1>
         <p className={styles.text}>
-          A tagline about [your app] that describes your value proposition.
+          Add custom fees, surcharges, and discounts to your store based on cart conditions, customer details, and product attributes.
         </p>
         {showForm && (
           <Form className={styles.form} method="post" action="/auth/login">
@@ -33,22 +33,22 @@ export default function App() {
               <span>e.g: my-shop-domain.myshopify.com</span>
             </label>
             <button className={styles.button} type="submit">
-              Log in
+              Install App
             </button>
           </Form>
         )}
         <ul className={styles.list}>
           <li>
-            <strong>Product feature</strong>. Some detail about your feature and
-            its benefit to your customer.
+            <strong>Conditional Fees</strong>. Apply fees based on cart subtotal, 
+            quantity, weight, customer location, and more.
           </li>
           <li>
-            <strong>Product feature</strong>. Some detail about your feature and
-            its benefit to your customer.
+            <strong>Multiple Calculation Types</strong>. Choose between fixed amount, 
+            percentage, or per-quantity calculations.
           </li>
           <li>
-            <strong>Product feature</strong>. Some detail about your feature and
-            its benefit to your customer.
+            <strong>Advanced Logic</strong>. Create complex rules with AND/OR 
+            condition groups for precise fee targeting.
           </li>
         </ul>
       </div>

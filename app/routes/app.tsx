@@ -12,14 +12,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return { apiKey: process.env.SHOPIFY_API_KEY || "" };
 };
 
-export default function App() {
+export default function FFMFSApp() {
   const { apiKey } = useLoaderData<typeof loader>();
 
   return (
     <AppProvider embedded apiKey={apiKey}>
       <s-app-nav>
-        <s-link href="/app">Home</s-link>
-        <s-link href="/app/additional">Additional page</s-link>
+        <s-link href="/app">Fee Rules</s-link>
+        <s-link href="/app/analytics">Analytics</s-link>
       </s-app-nav>
       <Outlet />
     </AppProvider>

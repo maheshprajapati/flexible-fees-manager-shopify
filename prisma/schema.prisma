@@ -9,8 +9,8 @@ generator client {
 // enough when changing adapters.
 // See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
 datasource db {
-  provider = "sqlite"
-  url      = "file:dev.sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Session {
@@ -31,4 +31,68 @@ model Session {
   emailVerified Boolean?  @default(false)
   refreshToken        String?
   refreshTokenExpires DateTime?
+}
+
+model FeeRule {
+  id             String   @id @default(uuid())
+  shopId         String
+  title          String
+  amount         Decimal  @db.Decimal(10, 2)
+  calculationType String  // 'fixed' | 'percentage' | 'multiple'
+  sign           String   @default("+") // '+' or '-'
+  taxClass       String?  // Taxable / Non-taxable / Custom tax class
+  status         String   @default("draft") // 'published' | 'draft' | 'pending'
+  priority       Int      @default(0)
+  parentAndOr    String   @default("and") // 'and' | 'or' - for combining condition groups
+  feeProductId   String?  // Shopify product ID for the fee
+  feeVariantId   String?  // Shopify variant ID for the fee
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  conditionGroups ConditionGroup[]
+
+  @@index([shopId])
+  @@index([status])
+  @@index([priority])
+}
+
+model ConditionGroup {
+  id        String   @id @default(uuid())
+  feeRuleId String
+  andOr     String   @default("and") // 'and' | 'or' - logic within group
+  order     Int      @default(0) // Order within fee rule
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  feeRule   FeeRule    @relation(fields: [feeRuleId], references: [id], onDelete: Cascade)
+  conditions Condition[]
+
+  @@index([feeRuleId])
+}
+
+model Condition {
+  id              String   @id @default(uuid())
+  conditionGroupId String
+  type            String   // Condition type (e.g., 'subtotal', 'country', 'product', etc.)
+  operator        String   // Operator (e.g., '>=', '==', 'contains', etc.)
+  value           String?  // Single value or JSON array for multiple values
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  conditionGroup  ConditionGroup @relation(fields: [conditionGroupId], references: [id], onDelete: Cascade)
+
+  @@index([conditionGroupId])
+}
+
+model Subscription {
+  id              String   @id @default(uuid())
+  shopId          String   @unique
+  plan            String   // 'free' | 'starter' | 'pro' | 'enterprise'
+  subscriptionId  String?  // Shopify subscription ID
+  status          String   // 'active' | 'cancelled' | 'expired'
+  currentPeriodEnd DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([shopId])
 }

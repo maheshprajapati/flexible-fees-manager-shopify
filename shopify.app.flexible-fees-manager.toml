@@ -1,6 +1,6 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "6983949f2a7a50e24df6eeac8c191c27"
+client_id = "8c52370c9cc20502a980f3238ed878bc"
 name = "flexible-fees-manager"
 application_url = "https://example.com"
 embedded = true
@@ -11,14 +11,6 @@ include_config_on_deploy = true
 
 [webhooks]
 api_version = "2026-01"
-
-  [[webhooks.subscriptions]]
-  topics = [ "app/uninstalled" ]
-  uri = "/webhooks/app/uninstalled"
-
-  [[webhooks.subscriptions]]
-  topics = [ "app/scopes_update" ]
-  uri = "/webhooks/app/scopes_update"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
